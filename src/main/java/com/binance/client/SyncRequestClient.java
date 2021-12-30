@@ -5,7 +5,14 @@ import com.binance.client.impl.BinanceApiInternalFactory;
 import com.binance.client.model.ResponseResult;
 import com.binance.client.model.market.*;
 import com.binance.client.model.enums.*;
-import com.binance.client.model.trade.*;
+import com.binance.client.model.trade.v2.AccountBalance;
+import com.binance.client.model.trade.AccountInformation;
+import com.binance.client.model.trade.Income;
+import com.binance.client.model.trade.Leverage;
+import com.binance.client.model.trade.MyTrade;
+import com.binance.client.model.trade.Order;
+import com.binance.client.model.trade.PositionRisk;
+import com.binance.client.model.trade.WalletDeltaLog;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package com.binance.client.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,9 +14,18 @@ import com.binance.client.impl.utils.JsonWrapperArray;
 import com.binance.client.impl.utils.UrlParamsBuilder;
 import com.binance.client.model.ResponseResult;
 import com.binance.client.model.market.*;
-import com.binance.client.model.trade.*;
 import com.binance.client.model.enums.*;
 
+import com.binance.client.model.trade.v2.AccountBalance;
+import com.binance.client.model.trade.AccountInformation;
+import com.binance.client.model.trade.Asset;
+import com.binance.client.model.trade.Income;
+import com.binance.client.model.trade.Leverage;
+import com.binance.client.model.trade.MyTrade;
+import com.binance.client.model.trade.Order;
+import com.binance.client.model.trade.Position;
+import com.binance.client.model.trade.PositionRisk;
+import com.binance.client.model.trade.WalletDeltaLog;
 import okhttp3.Request;
 import org.apache.commons.lang3.StringUtils;
 
@@ -942,7 +952,7 @@ class RestApiRequestImpl {
     RestApiRequest<List<AccountBalance>> getBalance() {
         RestApiRequest<List<AccountBalance>> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build();
-        request.request = createRequestByGetWithSignature("/fapi/v1/balance", builder);
+        request.request = createRequestByGetWithSignature("/fapi/v2/balance", builder);
 
         request.jsonParser = (jsonWrapper -> {
             List<AccountBalance> result = new LinkedList<>();
@@ -950,8 +960,14 @@ class RestApiRequestImpl {
             dataArray.forEach((item) -> {
                 AccountBalance element = new AccountBalance();
                 element.setAsset(item.getString("asset"));
-                element.setBalance(item.getBigDecimal("balance"));
-                element.setWithdrawAvailable(item.getBigDecimal("withdrawAvailable"));
+                element.setBalance(new BigDecimal(item.getString("balance")));
+                element.setAccountAlias(item.getString("accountAlias"));
+                element.setCrossWalletBalance(item.getBigDecimal("crossWalletBalance"));
+                element.setCrossUnPnl(item.getBigDecimal("crossUnPnl"));
+                element.setAvailableBalance(item.getBigDecimal("availableBalance"));
+                element.setMaxWithdrawAmount(item.getBigDecimal("maxWithdrawAmount"));
+                element.setMarginAvailable(item.getBoolean("marginAvailable"));
+                element.setUpdateTime(item.getLong("updateTime"));
                 result.add(element);
             });
             return result;
@@ -962,7 +978,7 @@ class RestApiRequestImpl {
     RestApiRequest<AccountInformation> getAccountInformation() {
         RestApiRequest<AccountInformation> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build();
-        request.request = createRequestByGetWithSignature("/fapi/v1/account", builder);
+        request.request = createRequestByGetWithSignature("/fapi/v2/account", builder);
 
         request.jsonParser = (jsonWrapper -> {
             AccountInformation result = new AccountInformation();
@@ -1043,7 +1059,7 @@ class RestApiRequestImpl {
     RestApiRequest<List<PositionRisk>> getPositionRisk() {
         RestApiRequest<List<PositionRisk>> request = new RestApiRequest<>();
         UrlParamsBuilder builder = UrlParamsBuilder.build();
-        request.request = createRequestByGetWithSignature("/fapi/v1/positionRisk", builder);
+        request.request = createRequestByGetWithSignature("/fapi/v2/positionRisk", builder);
 
         request.jsonParser = (jsonWrapper -> {
             List<PositionRisk> result = new LinkedList<>();
