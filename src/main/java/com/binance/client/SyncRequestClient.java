@@ -152,10 +152,22 @@ public interface SyncRequestClient {
      * @return
      */
     List<Object> postBatchOrders(String batchOrders);
-    
+
     /**
      * Send in a new order.
-     *
+     * @param symbol
+     * @param side
+     * @param positionSide
+     * @param orderType
+     * @param timeInForce
+     * @param quantity
+     * @param price
+     * @param reduceOnly
+     * @param newClientOrderId
+     * @param stopPrice
+     * @param workingType
+     * @param closePosition
+     * @param newOrderRespType
      * @return Order.
      */
     Order postOrder(String symbol, OrderSide side, PositionSide positionSide, OrderType orderType,
