@@ -1,15 +1,10 @@
 package com.binance.client.impl;
 
-import java.math.BigDecimal;
-import java.util.LinkedList;
-import java.util.List;
-
-import com.binance.client.impl.utils.JsonWrapper;
-import com.binance.client.impl.utils.JsonWrapperArray;
-
 import com.binance.client.SubscriptionErrorHandler;
 import com.binance.client.SubscriptionListener;
 import com.binance.client.impl.utils.Channels;
+import com.binance.client.impl.utils.JsonWrapper;
+import com.binance.client.impl.utils.JsonWrapperArray;
 import com.binance.client.model.enums.CandlestickInterval;
 import com.binance.client.model.event.AggregateTradeEvent;
 import com.binance.client.model.event.CandlestickEvent;
@@ -25,6 +20,10 @@ import com.binance.client.model.user.BalanceUpdate;
 import com.binance.client.model.user.OrderUpdate;
 import com.binance.client.model.user.PositionUpdate;
 import com.binance.client.model.user.UserDataUpdateEvent;
+
+import java.math.BigDecimal;
+import java.util.LinkedList;
+import java.util.List;
 
 class WebsocketRequestImpl {
 
@@ -461,13 +460,15 @@ class WebsocketRequestImpl {
             UserDataUpdateEvent result = new UserDataUpdateEvent();
             result.setEventType(jsonWrapper.getString("e"));
             result.setEventTime(jsonWrapper.getLong("E"));
-            result.setTransactionTime(jsonWrapper.getLong("T"));
+            result.setTransactionTime(jsonWrapper.getLongOrDefault("T", 0));
 
             if(jsonWrapper.getString("e").equals("ACCOUNT_UPDATE")) {
                 AccountUpdate accountUpdate = new AccountUpdate();
 
                 List<BalanceUpdate> balanceList = new LinkedList<>();
                 JsonWrapperArray dataArray = jsonWrapper.getJsonObject("a").getJsonArray("B");
+                String eventReasonType = jsonWrapper.getJsonObject("a").getString("m");
+                accountUpdate.setEventReasonType(eventReasonType);
                 dataArray.forEach(item -> {
                     BalanceUpdate balance = new BalanceUpdate();
                     balance.setAsset(item.getString("a"));
