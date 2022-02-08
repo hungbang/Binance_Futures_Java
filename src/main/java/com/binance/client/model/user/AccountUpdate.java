@@ -11,6 +11,8 @@ public class AccountUpdate {
 
     private List<PositionUpdate> positions;
 
+    private String eventReasonType;
+
     public List<BalanceUpdate> getBalances() {
         return balances;
     }
@@ -27,9 +29,17 @@ public class AccountUpdate {
         this.positions = positions;
     }
 
+    public String getEventReasonType() {
+        return eventReasonType;
+    }
+
+    public void setEventReasonType(String eventReasonType) {
+        this.eventReasonType = eventReasonType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE).append("balances", balances)
-                .append("positions", positions).toString();
+                .append("positions", positions).append("eventReasonType", eventReasonType).toString();
     }
 }
